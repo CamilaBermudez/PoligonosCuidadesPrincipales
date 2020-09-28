@@ -21,13 +21,14 @@ library(sf)
 
 # leemos el shape politico de Colombia
 shp_pol <- st_read("otras cuidades/POLITICO/MGN_MPIO_POLITICO.shp")
-mapview(shp_pol)
+#mapview(shp_pol)
 
 # Seleccionamos los shapes de las ciudades principales
 cali <- subset(shp_pol,DPTO_CCDGO=="76" & MPIO_CCDGO=="001") 
 medellin <- subset(shp_pol,DPTO_CCDGO=="05" & MPIO_CCDGO=="001")
 cartagena <- subset(shp_pol,DPTO_CCDGO=="13" & MPIO_CCDGO=="001")
 barranquilla <- subset(shp_pol,DPTO_CCDGO=="08" & MPIO_CCDGO=="001")
+bucaramanga <- subset(shp_pol,DPTO_CCDGO=="68" & MPIO_CCDGO=="001")
 
 #############################################################
 
@@ -40,7 +41,8 @@ cartagena <- as.geojson(cartagena)
 write(cartagena, "otras cuidades/ciudades/cartagena.geojson")
 barranquilla <- as.geojson(barranquilla)
 write(barranquilla, "otras cuidades/ciudades/barranquilla.geojson")
-
+bucaramanga <- as.geojson(bucaramanga)
+write(bucaramanga, "otras cuidades/ciudades/bucaramanga.geojson")
 
 #############################################################
 
@@ -83,6 +85,7 @@ cali <- geojson_read( "otras cuidades/ciudades/cali.geojson", what = "sp")
 medellin <- geojson_read( "otras cuidades/ciudades/medellin.geojson", what = "sp")
 cartagena <- geojson_read( "otras cuidades/ciudades/cartagena.geojson", what = "sp")
 barranquilla <- geojson_read( "otras cuidades/ciudades/barranquilla.geojson", what = "sp")
+bucaramanga <- geojson_read( "otras cuidades/ciudades/bucaramanga.geojson", what = "sp")
 
 
 # generacion hexahogonos de Cali
@@ -102,13 +105,21 @@ geojson_medellin<-as.geojson(hex_grid_a)
 write(geojson_medellin, "otras cuidades/ciudades/medellin_subdivi_100.geojson")
 
 
-# generacion hexahogonos de Cali
+# generacion hexahogonos de Barranquilla
 barranquilla_utm <- CRS("+proj=utm +zone=44 +datum=WGS84 +units=km +no_defs") %>% spTransform(barranquilla, .)
 hex_grid <- make_grid(barranquilla_utm, cell_area = 0.1, clip = TRUE)
 hex_grid_a<-CRS("+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs")%>% spTransform(hex_grid, .)
 hex_grid_a$ID<-1:length(hex_grid_a)
 geojson_barranquilla <-as.geojson(hex_grid_a)
 write(geojson_barranquilla, "otras cuidades/ciudades/barranquilla_subdivi_100.geojson")
+
+# generacion hexahogonos de Bucaramanga
+bucaramanga_utm <- CRS("+proj=utm +zone=44 +datum=WGS84 +units=km +no_defs") %>% spTransform(bucaramanga, .)
+hex_grid <- make_grid(bucaramanga_utm, cell_area = 0.1, clip = TRUE)
+hex_grid_a<-CRS("+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs")%>% spTransform(hex_grid, .)
+hex_grid_a$ID<-1:length(hex_grid_a)
+geojson_bucaramanga<-as.geojson(hex_grid_a)
+write(geojson_bucaramanga, "otras cuidades/ciudades/bucaramanga_subdivi_100.geojson")
 
 
 
