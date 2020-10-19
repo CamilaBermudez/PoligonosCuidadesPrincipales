@@ -207,6 +207,10 @@ write(geojson_cartagena, "otras ciudades/ciudades/cartagena_subdivi_100.geojson"
 ###########################################################
 
 # visualización de los poligonos
+bogota <- geojson_read( "otras ciudades/ciudades/bogota_subdivi_100.geojson", what = "sp")
+mapview(bogota)
+length(bogota)
+
 
 cali <- geojson_read( "otras ciudades/ciudades/cali_subdivi_100.geojson", what = "sp")
 mapview(cali)
@@ -228,14 +232,32 @@ mapview(cartagena)
 length(cartagena)
 
 
+bucaramanga <- geojson_read( "otras ciudades/ciudades/bucaramanga_subdivi_100.geojson", what = "sp")
+mapview(bucaramanga)
+length(bucaramanga)
+
 ############################################################
 
 cal_med<-union(cali,medellin)
 cal_med_bar <-union(cal_med,barranquilla)
-otras_ciudades <-union(cal_med_bar,cartagena)
+cal_med_bar_car <-union(cal_med_bar,cartagena)
+otras_ciudades <-union(cal_med_bar_car,bucaramanga)
 otras_ciudades$ID <- 1:length(otras_ciudades)
 mapview(otras_ciudades)
 
 
 geojson_otras_ciudades <-as.geojson(otras_ciudades)
 write(geojson_otras_ciudades, "otras ciudades/ciudades/otras_ciudades_subdivi_100.geojson")
+
+############################################################
+bog_cal <- union(bogota,cali)
+cal_med<-union(bog_cal,medellin)
+cal_med_bar <-union(cal_med,barranquilla)
+cal_med_bar_car <-union(cal_med_bar,cartagena)
+otras_ciudades <-union(cal_med_bar_car,bucaramanga)
+otras_ciudades$ID <- 1:length(otras_ciudades)
+mapview(otras_ciudades)
+
+
+geojson_todas_ciudades <-as.geojson(otras_ciudades)
+write(geojson_todas_ciudades, "otras ciudades/ciudades/todas_ciudades_subdivi_100.geojson")
